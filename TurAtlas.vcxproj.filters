@@ -24,33 +24,33 @@
     <ClCompile Include="main.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="process_manager.cpp">
+    <ClCompile Include="core\memory_manager.cpp">
       <Filter>Arquivos de Origem\core</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
+    <ClCompile Include="core\process_manager.cpp">
+      <Filter>Arquivos de Origem\core</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\utils.cpp">
       <Filter>Arquivos de Origem\utils</Filter>
     </ClCompile>
-    <ClCompile Include="memory_manager.cpp">
-      <Filter>Arquivos de Origem\core</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="process_manager.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="memory_manager.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="ui.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="games.json">
       <Filter>Arquivos de Origem</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header\memory_manager.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="header\process_manager.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="header\ui.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="header\utils.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

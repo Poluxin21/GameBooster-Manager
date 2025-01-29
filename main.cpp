@@ -4,9 +4,9 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include <windows.h>
-#include "process_manager.h"
-#include "memory_manager.h"
-#include "utils.h"
+#include "header/memory_manager.h"
+#include "header/process_manager.h"
+#include "header/utils.h"
 
 using json = nlohmann::json;
 
