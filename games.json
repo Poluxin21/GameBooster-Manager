@@ -1,0 +1,77 @@
+{
+  "games": [
+    {
+      "name": "Counter-Strike: Global Offensive",
+      "processes": [
+        "csgo.exe",
+        "steam.exe"
+      ],
+      "priority": "high",
+      "isOnline": true,
+      "category": "FPS",
+      "minSystemRequirements": {
+        "cpu": "Intel Core i3-370M",
+        "ram": "4GB",
+        "gpu": "Intel HD Graphics 3000"
+      }
+    },
+    {
+      "name": "The Witcher 3: Wild Hunt",
+      "processes": [
+        "witcher3.exe"
+      ],
+      "priority": "high",
+      "isOnline": false,
+      "category": "RPG",
+      "minSystemRequirements": {
+        "cpu": "Intel Core i5-2500K",
+        "ram": "6GB",
+        "gpu": "NVIDIA GeForce GTX 660"
+      }
+    },
+    {
+      "name": "Minecraft",
+      "processes": [
+        "javaw.exe"
+      ],
+      "priority": "medium",
+      "isOnline": true,
+      "category": "Sandbox",
+      "minSystemRequirements": {
+        "cpu": "Intel Core i3-3210",
+        "ram": "4GB",
+        "gpu": "Intel HD Graphics 4000"
+      }
+    },
+    {
+      "name": "Fortnite",
+      "processes": [
+        "FortniteClient-Win64-Shipping_BE.exe",
+        "FortniteLauncher.exe"
+      ],
+      "priority": "high",
+      "isOnline": true,
+      "category": "Battle Royale",
+      "minSystemRequirements": {
+        "cpu": "Intel Core i5-7300U",
+        "ram": "8GB",
+        "gpu": "NVIDIA GTX 660 or AMD Radeon HD 7870"
+      }
+    },
+    {
+      "name": "League of Legends",
+      "processes": [
+        "LeagueClient.exe",
+        "LeagueOfLegends.exe"
+      ],
+      "priority": "high",
+      "isOnline": true,
+      "category": "MOBA",
+      "minSystemRequirements": {
+        "cpu": "Intel Core i3",
+        "ram": "4GB",
+        "gpu": "Intel HD 3000"
+      }
+    }
+  ]
+}
