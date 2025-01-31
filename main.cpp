@@ -56,7 +56,7 @@ int configureProcess(vector<string>& gameProcesses) {
                 if (!proc.empty()) {
                     string pathProc = ut.ExtractNameByPath(proc);
                     cout << "Nome: " << pathProc << " Pid: " << pid << endl;
-                    p.definePriority(handleProc);
+                    //p.definePriority(handleProc);
                 }
             }
         }
@@ -65,23 +65,63 @@ int configureProcess(vector<string>& gameProcesses) {
     return 1;
 }
 
-int StopServices() {
+int StopWinServices() {
     ProcessesManager p;
     std::vector<const char*> services = {
-        "SearchIndexer",
+        // Windows Update related
         "wuauserv",
+        "UsoSvc",
+        "bits",
+
+        // System Services
         "SysMain",
+        "DiagTrack",
+        "dmwappushservice",
+        "MapsBroker",
+        "lfsvc",
+
+        // Microsoft Services
         "OneDrive",
-        "spooler"
+        "SearchIndexer",
+        "MessagingService",
+        "PushToInstall",
+
+        // Print Services
+        "spooler",
+        "PrintNotify",
+
+        // Remote Access/Sharing
+        "RemoteRegistry",
+        "RemoteAccess",
+        "SharedAccess",
+
+        // Optional Features
+        "XblAuthManager",
+        "XblGameSave",
+        "XboxNetApiSvc",
+        "WMPNetworkSvc",
+
+        // Misc Services
+        "WSearch",
+        "iphlpsvc",
+        "WbioSrvc",
+        "FontCache",
+        "TabletInputService",
+        "AdobeARMservice",
+        "GoogleChromeElevationService",
+        "gupdate",
+        "Steam Client Service"
     };
 
     bool allStopped = true;
+    std::vector<const char*> failedServices;
+
     for (const char* service : services) {
         if (!p.StopService(service)) {
             allStopped = false;
+            failedServices.push_back(service);
         }
     }
-
     return allStopped ? 0 : 1;
 }
 
@@ -91,7 +131,7 @@ int main() {
     if (!gameProcesses.empty())
     {
         configureProcess(gameProcesses);
-        int result = StopServices();
+        int result = StopWinServices();
         if (result == 0) {
             std::cout << "Todos os serviços foram parados com sucesso." << std::endl;
         }

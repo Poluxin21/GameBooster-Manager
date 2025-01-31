@@ -101,59 +101,171 @@ int ProcessesManager::definePriority(HANDLE processName)
 
 bool ProcessesManager::StopService(const char* serviceName)
 {
-	SC_HANDLE hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
-	if (!hSCManager) {
-		std::cerr << "Falha ao abrir o gerenciador de serviços." << std::endl;
-		return false;
-	}
-
-	SC_HANDLE hService = OpenService(hSCManager, (LPCWSTR)serviceName, SERVICE_STOP | SERVICE_QUERY_STATUS);
-	if (!hService) {
-		std::cerr << "Falha ao abrir o serviço: " << serviceName << std::endl;
-		CloseServiceHandle(hSCManager);
-		return false;
-	}
-
-	SERVICE_STATUS serviceStatus = {};
-	bool result = ControlService(hService, SERVICE_CONTROL_STOP, &serviceStatus);
-
-	if (result) {
-		std::cout << "Serviço parado: " << serviceName << std::endl;
+	std::wstring wServiceName;
+	int len = MultiByteToWideChar(CP_UTF8, 0, serviceName, -1, NULL, 0);
+	if (len > 0) {
+		wServiceName.resize(len);
+		MultiByteToWideChar(CP_UTF8, 0, serviceName, -1, &wServiceName[0], len);
 	}
 	else {
-		std::cerr << "Falha ao parar o serviço: " << serviceName << std::endl;
-	}
-
-	CloseServiceHandle(hService);
-	CloseServiceHandle(hSCManager);
-	return result;
-}
-
-bool ProcessesManager::StartServiceProcess(const char* serviceName) {
-	SC_HANDLE hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
-	if (!hSCManager) {
-		std::cerr << "Falha ao abrir o gerenciador de serviços." << std::endl;
+		std::cerr << "Erro na conversão do nome do serviço" << std::endl;
 		return false;
 	}
 
-	SC_HANDLE hService = OpenService(hSCManager, (LPCWSTR)serviceName, SERVICE_START);
+	SC_HANDLE hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+	if (!hSCManager) {
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao abrir o gerenciador de serviços. Erro: " << error << std::endl;
+		return false;
+	}
+
+	SC_HANDLE hService = OpenService(hSCManager, wServiceName.c_str(), SERVICE_STOP | SERVICE_QUERY_STATUS);
 	if (!hService) {
-		std::cerr << "Falha ao abrir o serviço: " << serviceName << std::endl;
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao abrir o serviço: " << serviceName << ". Erro: " << error << std::endl;
 		CloseServiceHandle(hSCManager);
 		return false;
 	}
 
-	if (StartService(hService, 0, NULL)) {
-		std::cout << "Serviço iniciado: " << serviceName << std::endl;
+	SERVICE_STATUS_PROCESS ssp;
+	DWORD bytesNeeded;
+	if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO,
+		(LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded)) {
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao consultar status do serviço. Erro: " << error << std::endl;
+		CloseServiceHandle(hService);
+		CloseServiceHandle(hSCManager);
+		return false;
+	}
+
+	if (ssp.dwCurrentState == SERVICE_STOPPED) {
+		std::cout << "Serviço já está parado: " << serviceName << std::endl;
+		CloseServiceHandle(hService);
+		CloseServiceHandle(hSCManager);
 		return true;
 	}
-	else {
-		std::cerr << "Falha ao iniciar o serviço: " << serviceName << std::endl;
+
+	SERVICE_STATUS serviceStatus;
+	if (!ControlService(hService, SERVICE_CONTROL_STOP, &serviceStatus)) {
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao parar o serviço: " << serviceName << ". Erro: " << error << std::endl;
+		CloseServiceHandle(hService);
+		CloseServiceHandle(hSCManager);
 		return false;
 	}
 
+	DWORD startTime = GetTickCount();
+	DWORD timeout = 30000;
+
+	while (serviceStatus.dwCurrentState != SERVICE_STOPPED) {
+		Sleep(250);
+
+		if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO,
+			(LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded)) {
+			break;
+		}
+
+		if (GetTickCount() - startTime > timeout) {
+			std::cerr << "Timeout ao aguardar o serviço parar: " << serviceName << std::endl;
+			CloseServiceHandle(hService);
+			CloseServiceHandle(hSCManager);
+			return false;
+		}
+	}
+
+	std::cout << "Serviço parado com sucesso: " << serviceName << std::endl;
 	CloseServiceHandle(hService);
 	CloseServiceHandle(hSCManager);
+	return true;
+}
+
+
+bool ProcessesManager::StartServiceProcess(const char* serviceName) {
+	std::wstring wServiceName;
+	int len = MultiByteToWideChar(CP_UTF8, 0, serviceName, -1, NULL, 0);
+	if (len > 0) {
+		wServiceName.resize(len);
+		MultiByteToWideChar(CP_UTF8, 0, serviceName, -1, &wServiceName[0], len);
+	}
+	else {
+		std::cerr << "Erro na conversão do nome do serviço" << std::endl;
+		return false;
+	}
+
+	SC_HANDLE hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+	if (!hSCManager) {
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao abrir o gerenciador de serviços. Erro: " << error << std::endl;
+		return false;
+	}
+
+	SC_HANDLE hService = OpenService(hSCManager, wServiceName.c_str(),
+		SERVICE_START | SERVICE_QUERY_STATUS);
+	if (!hService) {
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao abrir o serviço: " << serviceName << ". Erro: " << error << std::endl;
+		CloseServiceHandle(hSCManager);
+		return false;
+	}
+
+	SERVICE_STATUS_PROCESS ssp;
+	DWORD bytesNeeded;
+	if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO,
+		(LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded)) {
+		DWORD error = GetLastError();
+		std::cerr << "Falha ao consultar status do serviço. Erro: " << error << std::endl;
+		CloseServiceHandle(hService);
+		CloseServiceHandle(hSCManager);
+		return false;
+	}
+
+	if (ssp.dwCurrentState == SERVICE_RUNNING) {
+		std::cout << "Serviço já está em execução: " << serviceName << std::endl;
+		CloseServiceHandle(hService);
+		CloseServiceHandle(hSCManager);
+		return true;
+	}
+
+
+	if (ssp.dwCurrentState == SERVICE_START_PENDING) {
+		std::cout << "Serviço já está iniciando: " << serviceName << std::endl;
+	}
+
+	else if (ssp.dwCurrentState == SERVICE_STOPPED) {
+		if (!StartService(hService, 0, NULL)) {
+			DWORD error = GetLastError();
+			std::cerr << "Falha ao iniciar o serviço: " << serviceName << ". Erro: " << error << std::endl;
+			CloseServiceHandle(hService);
+			CloseServiceHandle(hSCManager);
+			return false;
+		}
+	}
+
+	DWORD startTime = GetTickCount();
+	DWORD timeout = 30000;
+
+	while (ssp.dwCurrentState != SERVICE_RUNNING) {
+		Sleep(250);
+
+		if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO,
+			(LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded)) {
+			DWORD error = GetLastError();
+			std::cerr << "Falha ao consultar status do serviço durante inicialização. Erro: " << error << std::endl;
+			break;
+		}
+
+		if (GetTickCount() - startTime > timeout) {
+			std::cerr << "Timeout ao aguardar o serviço iniciar: " << serviceName << std::endl;
+			CloseServiceHandle(hService);
+			CloseServiceHandle(hSCManager);
+			return false;
+		}
+	}
+
+	std::cout << "Serviço iniciado com sucesso: " << serviceName << std::endl;
+	CloseServiceHandle(hService);
+	CloseServiceHandle(hSCManager);
+	return true;
 }
 
 void ProcessesManager::SetCPUAffinity(HANDLE hProcess, DWORD_PTR mask)

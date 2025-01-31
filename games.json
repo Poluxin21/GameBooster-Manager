@@ -72,6 +72,20 @@
         "ram": "4GB",
         "gpu": "Intel HD 3000"
       }
+    },
+    {
+      "name": "Roblox",
+      "processes": [
+        "Roblox"
+      ],
+      "priority": "high",
+      "isOnline": true,
+      "category": "Engine",
+      "minSystemRequirements": {
+        "cpu": "Intel core i3",
+        "ram": "4GB",
+        "gpu": "Intel HD 620"
+      }
     }
   ]
 }
