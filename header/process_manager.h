@@ -1,6 +1,6 @@
 #ifndef PROCESSES_MANAGER_H 
 #define PROCESSES_MANAGER_H
-
+#define _NO_WINDOWS_BYTE
 
 #include <windows.h>
 #include <psapi.h>
@@ -10,19 +10,17 @@
 #include <tlhelp32.h>
 #include "utils.h"
 
-using namespace std;
-
 class ProcessesManager
 {
 public:
 
 	UtilsClass u;
 
-	pair<unsigned int, vector<int>> num_process();
+	std::pair<unsigned int, std::vector<int>> num_process();
 
-	string getProcessName(int pid);
+	std::string getProcessName(int pid);
 
-	string getProcessfilter(string processName, int pid);
+	std::string getProcessfilter(std::string processName, int pid);
 
 	HANDLE getProcessHandle(int pid);
 
@@ -36,8 +34,8 @@ public:
 
 
 private:
-	string processName;
-	vector<int> numProcessid;
+	std::string processName;
+	std::vector<int> numProcessid;
 	DWORD processes[1024];
 	DWORD cbNedeed;
 	unsigned int i;

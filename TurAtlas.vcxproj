@@ -109,6 +109,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\clibs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +143,7 @@
     <None Include="games.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\GameOptimizer.h" />
     <ClInclude Include="header\memory_manager.h" />
     <ClInclude Include="header\process_manager.h" />
     <ClInclude Include="header\ui.h" />

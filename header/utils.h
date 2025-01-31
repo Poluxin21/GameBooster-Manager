@@ -4,19 +4,17 @@
 #include <iostream>
 #include <basetsd.h>
 
-using namespace std;
-
 class UtilsClass
 {
 public:
-	string ExtractNameByPath(string path);
+	std::string ExtractNameByPath(std::string path);
 
-	string GetTimeCurrent(string s);
+	std::string GetTimeCurrent(std::string s);
 
-	string Logger(string logMsg);
+	std::string Logger(std::string logMsg);
 
 private:
-	string defaultPath;
+	std::string defaultPath;
 };
 
 #endif

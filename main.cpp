@@ -1,3 +1,4 @@
+#define _NO_WINDOWS_BYTE
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,11 +11,9 @@
 
 using json = nlohmann::json;
 
-using namespace std;
-
-vector<string> loadGameConfig() {
-    ifstream file("games.json");
-    vector<string> processesToMonitor;
+std::vector<std::string> loadGameConfig() {
+    std::ifstream file("games.json");
+    std::vector<std::string> processesToMonitor;
 
     if (file.is_open()) {
         json gamesData;
@@ -27,35 +26,35 @@ vector<string> loadGameConfig() {
         }
     }
     else {
-        cerr << "Não foi possível abrir o arquivo de configuração!" << endl;
+        std::cerr << "Não foi possível abrir o arquivo de configuração!" << std::endl;
     }
 
     return processesToMonitor;
 }
 
-int configureProcess(vector<string>& gameProcesses) {
+int configureProcess(std::vector<std::string>& gameProcesses) {
     ProcessesManager p;
     MemoryManager m;
     UtilsClass ut;
 
-    string proc;
+    std::string proc;
     HANDLE handleProc;
     DWORD_PTR mask = 0xF;
 
     auto numProcess = p.num_process();
 
     for (const int& pid : numProcess.second) {
-        string name = p.getProcessName(pid);
+        std::string name = p.getProcessName(pid);
         if (!name.empty()) {
             handleProc = p.getProcessHandle(pid);
             p.SetCPUAffinity(handleProc, mask);
 
-            for (const string& filter : gameProcesses) {
+            for (const std::string& filter : gameProcesses) {
                 proc = p.getProcessfilter(filter, pid);
 
                 if (!proc.empty()) {
-                    string pathProc = ut.ExtractNameByPath(proc);
-                    cout << "Nome: " << pathProc << " Pid: " << pid << endl;
+                    std::string pathProc = ut.ExtractNameByPath(proc);
+                    std::cout << "Nome: " << pathProc << " Pid: " << pid << std::endl;
                     //p.definePriority(handleProc);
                 }
             }
@@ -126,7 +125,7 @@ int StopWinServices() {
 }
 
 int main() {
-    vector<string> gameProcesses = loadGameConfig();
+    std::vector<std::string> gameProcesses = loadGameConfig();
 
     if (!gameProcesses.empty())
     {
@@ -141,7 +140,7 @@ int main() {
     }
     else
     {
-        cout << "Não foi possivel encontrar nenhum jogo para otimizar";
+        std::cout << "Não foi possivel encontrar nenhum jogo para otimizar";
         return 0;
     }
     

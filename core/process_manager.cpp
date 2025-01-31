@@ -6,15 +6,14 @@
 #include "../header/process_manager.h"
 
 #pragma comment(lib, "dwmapi.lib")
-using namespace std;
 
-pair<unsigned int, vector<int>> ProcessesManager::num_process()
+std::pair<unsigned int, std::vector<int>> ProcessesManager::num_process()
 {
 	if (EnumProcesses(processes, sizeof(processes), &cbNedeed))
 	{
 		unsigned int numProcesses = cbNedeed / sizeof(DWORD);
 
-		vector<int> numProcessid;
+		std::vector<int> numProcessid;
 		for (i = 0; i < numProcesses; i++)
 		{
 			numProcessid.push_back(static_cast<int>(processes[i]));
@@ -24,11 +23,11 @@ pair<unsigned int, vector<int>> ProcessesManager::num_process()
 	else
 	{
 		u.Logger("Não foi possível encontrar nenhum processo");
-		return make_pair(0, vector<int>());
+		return std::make_pair(0, std::vector<int>());
 	}
 }
 
-string ProcessesManager::getProcessName(int pid)
+std::string ProcessesManager::getProcessName(int pid)
 {
 
 	HANDLE handle = OpenProcess(
@@ -57,12 +56,12 @@ string ProcessesManager::getProcessName(int pid)
 }
 
 
-string ProcessesManager::getProcessfilter(string filter, int pid)
+std::string ProcessesManager::getProcessfilter(std::string filter, int pid)
 {
-	string ProcessName = getProcessName(pid);
+	std::string ProcessName = getProcessName(pid);
 	if (!ProcessName.empty())
 	{
-		if (ProcessName.find(filter) != string::npos)
+		if (ProcessName.find(filter) != std::string::npos)
 		{
 			return ProcessName;
 		}

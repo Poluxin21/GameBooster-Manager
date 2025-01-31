@@ -1,5 +1,6 @@
 #ifndef MEMORY_MANAGER_H 
 #define MEMORY_MANAGER_H
+#define _NO_WINDOWS_BYTE
 
 #include <windows.h>
 #include <psapi.h>
@@ -8,15 +9,13 @@
 #include <utility>
 #include "utils.h"
 
-using namespace std;
-
 class MemoryManager
 {
 public:
 
 	UtilsClass u;
 
-	pair<int, int> memory_usage();
+	std::pair<int, int> memory_usage();
 
 	SIZE_T memory_per_process(int processId);
 

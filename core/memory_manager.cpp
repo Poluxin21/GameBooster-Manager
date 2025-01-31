@@ -1,3 +1,4 @@
+#define _NO_WINDOWS_BYTE
 #include <windows.h>
 #include <psapi.h>
 #include <iostream>
@@ -7,9 +8,7 @@
 #include <TlHelp32.h>
 #include "../header/memory_manager.h"
 
-using namespace std;
-
-pair<int, int> MemoryManager::memory_usage()
+std::pair<int, int> MemoryManager::memory_usage()
 {
     MEMORYSTATUSEX stats{};
     stats.dwLength = sizeof(stats);
@@ -20,7 +19,7 @@ pair<int, int> MemoryManager::memory_usage()
 
     if (GlobalMemoryStatusEx(&stats))
     {
-        return make_pair(freeRam, total);
+        return std::make_pair(freeRam, total);
     }
     else
     {

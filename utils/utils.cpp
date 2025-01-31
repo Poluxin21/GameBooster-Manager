@@ -3,16 +3,15 @@
 #include <chrono>
 #include <iostream>
 #include <fstream>
-using namespace std;
 
-string UtilsClass::ExtractNameByPath(string path)
+std::string UtilsClass::ExtractNameByPath(std::string path)
 {
-	string allpath = path;
-	string result = allpath.substr(allpath.find_last_of("/\\") + 1);
+	std::string allpath = path;
+	std::string result = allpath.substr(allpath.find_last_of("/\\") + 1);
 	return result;
 }
 
-string UtilsClass::GetTimeCurrent(string s)
+std::string UtilsClass::GetTimeCurrent(std::string s)
 {
 	time_t now = time(0);
 	struct tm tstruct;
@@ -26,17 +25,17 @@ string UtilsClass::GetTimeCurrent(string s)
 	{
 		strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
 	}
-	return string(buf);
+	return std::string(buf);
 
 }
 
 
-string UtilsClass::Logger(string logMsg)
+std::string UtilsClass::Logger(std::string logMsg)
 {
 
 	defaultPath = "C:/turatlas/log_" + GetTimeCurrent("data") + ".txt";
-	string now = GetTimeCurrent("now");
-	ofstream ofs(defaultPath.c_str(), ios_base::out | ios_base::app);
+	std::string now = GetTimeCurrent("now");
+	std::ofstream ofs(defaultPath.c_str(), std::ios_base::out | std::ios_base::app);
 
 	if (!ofs)
 	{
