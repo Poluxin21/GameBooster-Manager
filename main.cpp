@@ -12,5 +12,6 @@ int main() {
     GameOptimizer gameOptimizer;
     gameOptimizer.initialize();
     gameOptimizer.optimize();
+    std::cout << "TurAtlas: Otimização concluida, Ja pode aproveitar sua gameplay!" << std::endl;;
     return 0;
 }

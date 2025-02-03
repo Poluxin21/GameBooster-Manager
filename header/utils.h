@@ -7,11 +7,11 @@
 class UtilsClass
 {
 public:
-	std::string ExtractNameByPath(std::string path);
+	std::string ExtractNameByPath(const std::string& path);
 
-	std::string GetTimeCurrent(std::string s);
+	std::string GetTimeCurrent(const std::string& format);
 
-	std::string Logger(std::string logMsg);
+	void Logger(const std::string& logMsg);
 
 private:
 	std::string defaultPath;

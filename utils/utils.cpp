@@ -3,46 +3,53 @@
 #include <chrono>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
-std::string UtilsClass::ExtractNameByPath(std::string path)
+std::string UtilsClass::ExtractNameByPath(const std::string& path)
 {
-	std::string allpath = path;
-	std::string result = allpath.substr(allpath.find_last_of("/\\") + 1);
-	return result;
+    return std::filesystem::path(path).filename().string();
 }
 
-std::string UtilsClass::GetTimeCurrent(std::string s)
+std::string UtilsClass::GetTimeCurrent(const std::string& format)
 {
-	time_t now = time(0);
-	struct tm tstruct;
-	char buf[80];
-	localtime_s(&tstruct, &now);
-	if (s == "now")
-	{
-		strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
-	}
-	else if (s == "date")
-	{
-		strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
-	}
-	return std::string(buf);
+    std::time_t now = std::time(nullptr);
+    std::tm tstruct = {};
+    std::stringstream ss;
 
+#ifdef _WIN32
+    localtime_s(&tstruct, &now);
+#else
+    localtime_r(&now, &tstruct);
+#endif
+
+    ss << std::put_time(&tstruct,
+        (format == "now") ? "%Y-%m-%d %X" :
+        (format == "date") ? "%Y-%m-%d" :
+        "%Y-%m-%d %X");
+
+    return ss.str();
 }
 
-
-std::string UtilsClass::Logger(std::string logMsg)
+void UtilsClass::Logger(const std::string& logMsg)
 {
+    try {
+        std::filesystem::path logDir = "C:/turatlas";
+        std::filesystem::create_directories(logDir);
 
-	defaultPath = "C:/turatlas/log_" + GetTimeCurrent("data") + ".txt";
-	std::string now = GetTimeCurrent("now");
-	std::ofstream ofs(defaultPath.c_str(), std::ios_base::out | std::ios_base::app);
+        std::string logFileName = "log_" + GetTimeCurrent("date") + ".txt";
+        std::filesystem::path logPath = logDir / logFileName;
 
-	if (!ofs)
-	{
-		return "Erro de sistema";
-	}
+        std::ofstream ofs(logPath, std::ios_base::out | std::ios_base::app);
+        if (!ofs) {
+            std::cerr << "Failed to open log file: " << logPath << std::endl;
+            return;
+        }
 
-	ofs << now << '\t' << logMsg << '\n';
-	ofs.close();
-
+        std::string now = GetTimeCurrent("now");
+        ofs << now << '\t' << logMsg << '\n';
+        ofs.close();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Logger error: " << e.what() << std::endl;
+    }
 }
