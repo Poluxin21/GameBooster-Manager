@@ -9,7 +9,7 @@ using json = nlohmann::json;
 
 std::optional<std::vector<std::string>> GameOptimizer::loadGameConfig()
 {
-    std::ifstream file("../games.json");
+    std::ifstream file("games.json");
     std::vector<std::string> processesToMonitor;
 
     if (file.is_open()) {
