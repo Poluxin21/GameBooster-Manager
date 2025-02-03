@@ -33,6 +33,9 @@
     <ClCompile Include="utils\utils.cpp">
       <Filter>Arquivos de Origem\utils</Filter>
     </ClCompile>
+    <ClCompile Include="utils\GameOptimizer.cpp">
+      <Filter>Arquivos de Origem\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="games.json">

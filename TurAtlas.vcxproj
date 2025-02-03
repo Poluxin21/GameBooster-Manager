@@ -137,6 +137,7 @@
     <ClCompile Include="core\memory_manager.cpp" />
     <ClCompile Include="core\process_manager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utils\GameOptimizer.cpp" />
     <ClCompile Include="utils\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
