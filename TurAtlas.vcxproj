@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="core\memory_manager.cpp" />
     <ClCompile Include="core\process_manager.cpp" />
+    <ClCompile Include="core\system_cleaner.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utils\GameOptimizer.cpp" />
     <ClCompile Include="utils\utils.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="header\GameOptimizer.h" />
     <ClInclude Include="header\memory_manager.h" />
     <ClInclude Include="header\process_manager.h" />
+    <ClInclude Include="header\SystemCleaner.h" />
     <ClInclude Include="header\ui.h" />
     <ClInclude Include="header\utils.h" />
   </ItemGroup>

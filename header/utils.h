@@ -13,6 +13,8 @@ public:
 
 	void Logger(const std::string& logMsg);
 
+	void GetHighlevel();
+
 private:
 	std::string defaultPath;
 };

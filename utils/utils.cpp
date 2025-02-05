@@ -53,3 +53,16 @@ void UtilsClass::Logger(const std::string& logMsg)
         std::cerr << "Logger error: " << e.what() << std::endl;
     }
 }
+
+//void UtilsClass::GetHighlevel()
+//{
+//    SHELLEXECUTEINFO sei = { sizeof(sei) };
+//    sei.lpVerb = L"runas";
+//    sei.lpFile = L"TurAtlas.exe";
+//    sei.nShow = SW_SHOWNORMAL;
+//
+//    if (!ShellExecuteEx(&sei)) {
+//        std::cerr << "Erro ao elevar permissões!" << std::endl;
+//        Logger("Erro ao elevar permissões!");
+//    }
+//}
