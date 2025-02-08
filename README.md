@@ -8,7 +8,7 @@
 - Detecção automatica do jogo
 - Gerenciamento de Memoria que não afeta Streams
 - Fechar processos desnecessarios durante a execução do Jogo
-
+- Otimizador de Armazenamento em Disco ( Junk Files )
 
 # A Implementar
 
