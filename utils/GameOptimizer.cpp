@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cstdlib>
 #include "../header/GameOptimizer.h"
 #include "../libs/nlohmann/json.hpp"
 
@@ -31,8 +32,6 @@ std::optional<std::vector<std::string>> GameOptimizer::loadGameConfig()
 
 bool GameOptimizer::configureGameProcesses()
 {
-    /*utils.GetHighlevel();*/
-    
 
     auto processList = processes.num_process();
 
@@ -108,4 +107,42 @@ bool GameOptimizer::stopWindowsServices() {
     }
 
     return success;
+}
+
+bool GameOptimizer::cleanJunkFiles()
+{
+    char* username = nullptr;
+    size_t len;
+
+    if (_dupenv_s(&username, &len, "USERNAME") != 0 || username == nullptr) {
+        std::cerr << "Erro ao obter nome de usuário." << std::endl;
+        return false;
+    }
+
+    std::string pathBase = "C:\\Users\\" + std::string(username);
+    free(username);
+
+    std::string pathArray[] = {
+        "C:\\Windows\\Temp\\",
+        "\\AppData\\Local\\CrashDumps\\",
+        "C:\\ProgramData\\Microsoft\\Windows\\WER\\",
+        "\\AppData\\Local\\Temp\\"
+    };
+
+    bool foundFiles = false;
+
+    for (size_t i = 0; i < (sizeof(pathArray) / sizeof(pathArray[0])); i++) {
+        std::string pathName = pathArray[i];
+
+        if (pathName.starts_with("C")) {
+            systemCleaner.cleanFiles(pathName);
+        }
+        else {
+            systemCleaner.cleanFiles(pathBase + pathName);
+        }
+
+        foundFiles = true;
+    }
+
+    return foundFiles;
 }

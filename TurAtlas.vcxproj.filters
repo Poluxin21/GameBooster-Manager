@@ -36,6 +36,9 @@
     <ClCompile Include="utils\GameOptimizer.cpp">
       <Filter>Arquivos de Origem\utils</Filter>
     </ClCompile>
+    <ClCompile Include="core\system_cleaner.cpp">
+      <Filter>Arquivos de Origem\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="games.json">
@@ -56,6 +59,9 @@
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="header\GameOptimizer.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="header\SystemCleaner.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #include "../header/SystemCleaner.h"
 #include <iostream>
 #include <filesystem>
+#include <cstdio>
 #include <vector>
 #include <fstream>
 
